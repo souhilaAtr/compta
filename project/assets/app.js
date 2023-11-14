@@ -12,4 +12,7 @@ import './styles/app.css';
 import './bootstrap';
 
 
+// Import Bootstrap's styles
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 console.log('webpack fontionne');
