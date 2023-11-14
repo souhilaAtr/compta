@@ -1,0 +1,12 @@
+body {
+    background-color: lightgray;
+
+    border: 2px solid purple;
+}
+
+.home-background {
+    background-image: url('/path/to/your/image.jpg');
+    background-size: cover;
+    background-position: center;
+    /* Autres styles de fond si nécessaire */
+}
