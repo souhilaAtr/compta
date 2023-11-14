@@ -5,11 +5,7 @@ Un outil d'extraction de pdf et de calculs comptables
 
 ## Deployment
 
-To deploy this project run
 
-```bash
-  npm run deploy
-```
 
  —— 🔥 App ——                 
 ```init                           Init the project
