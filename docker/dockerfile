@@ -18,15 +18,15 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash \
     && apt-get install -y nodejs
 
-# Install Symfony CLI
-RUN curl -sS https://get.symfony.com/cli/installer | bash \
-    && mv /root/.symfony/* /usr/local/bin/
 
 # Configure and install PHP extensions
 RUN docker-php-ext-configure intl \
     && docker-php-ext-install pdo pdo_mysql opcache intl zip calendar dom mbstring gd xsl \
     && pecl install apcu \
     && docker-php-ext-enable apcu
-
+# Install Symfony CLI
+# RUN curl -sS https://get.symfony.com/cli/installer | bash \
+#     && mv /root/.symfony/* /usr/local/bin/
 # Set the working directory
 WORKDIR /var/www/
+
