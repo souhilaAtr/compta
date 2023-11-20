@@ -1,6 +1,67 @@
 {% extends 'base.html.twig' %}
 
 {% block title %} Accueil {% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+
 {% block body %}
- Hello
+
+ <body class="home-background">
+    <div class="sliderconteneur mx-auto d-flex align-items-center">
+        <div id="carouselExample" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{{ asset('assets/img/cabinet-comptable.jpg') }}" class="d-block w-100" alt="Image 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('assets/img/expert-comptable.jpg') }}" class="d-block w-100" alt="Image 2">
+                </div>
+                <div class="carousel-item">
+                    <img src="{{ asset('assets/img/review.jpg') }}" class="d-block w-100" alt="Image 2">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExample" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+
+        <div class="container text-black">
+            <div class="row">
+                <div class="col-md-6">
+                    Nos experts vous renseignent
+                </div>
+                <div class="col-md-6">
+                    Experts comptables 
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="text-center">
+    <a href="{{ path('app_contact') }}" class="btn btn-primary">Contact</a>
+</div>
+
+</body>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Inclure les scripts spécifiques au slider si nécessaire #}
+    <script>
+        // Initialiser le slider ici
+        $(document).ready(function() {
+            $('#carouselExample').carousel();
+        });
+    </script>
 {% endblock %}
