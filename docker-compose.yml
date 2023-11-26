@@ -4,22 +4,30 @@ services:
 
   database:
     image: mysql:8.0.35
+    container_name: database_compta
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: compta
-      
-      
+      image: mysql:8.0.35
+    restart: always
     volumes:
       - database_data:/var/lib/mysql
+    networks:
+      - dev
+      
+
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    links:
+    image: phpmyadmin
+    container_name: phpmyadmin_compta
+    depends_on:
       - database
     ports:
       - "8080:80"
     environment:
       PMA_HOST: database
       MYSQL_ROOT_PASSWORD: ""
+    networks:
+      - dev
 
   www:
     build: docker

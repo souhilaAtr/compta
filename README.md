@@ -5,7 +5,11 @@ Un outil d'extraction de pdf et de calculs comptables
 
 ## Deployment
 
+Utilisez les commandes make pour déployer le projet
 
+```bash
+  npm run deploy
+```
 
  —— 🔥 App ——                 
 ```init                           Init the project
@@ -43,3 +47,29 @@ fixtures                       Alias : database-fixtures-load
  —— 🛠️  Others ——            
 help                           List of commands
 ```
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/Slvn89/compta.git
+```
+
+Go to the project directory
+
+```bash
+  cd compta
+```
+
+Install dependencies
+
+```bash
+  docker compose up -d
+```
+
+Start the server
+
+```bash
+  docker compose ps
+```
+
