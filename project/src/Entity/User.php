@@ -2,109 +2,66 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
+/**
+ * User
+ *
+ * @ORM\Table(name="user")
+ * @ORM\Entity
+ */
 class User
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $user_id;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $nom = null;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="nom", type="string", length=255, nullable=true)
+     */
+    private $nom;
 
-    #[ORM\Column(length: 255)]
-    private ?string $prenom = null;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prenom", type="string", length=255, nullable=false)
+     */
+    private $prenom;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $password = null;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="password", type="string", length=255, nullable=true)
+     */
+    private $password;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $email = null;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     */
+    private $email;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $adress = null;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="adress", type="string", length=255, nullable=true)
+     */
+    private $adress;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $mobile = null;
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="mobile", type="string", length=255, nullable=true)
+     */
+    private $mobile;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
-
-    public function setNom(?string $nom): static
-    {
-        $this->nom = $nom;
-
-        return $this;
-    }
-
-    public function getPrenom(): ?string
-    {
-        return $this->prenom;
-    }
-
-    public function setPrenom(string $prenom): static
-    {
-        $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(?string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(?string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getAdress(): ?string
-    {
-        return $this->adress;
-    }
-
-    public function setAdress(?string $adress): static
-    {
-        $this->adress = $adress;
-
-        return $this;
-    }
-
-    public function getMobile(): ?string
-    {
-        return $this->mobile;
-    }
-
-    public function setMobile(?string $mobile): static
-    {
-        $this->mobile = $mobile;
-
-        return $this;
-    }
 }

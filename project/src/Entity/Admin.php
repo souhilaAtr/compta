@@ -2,99 +2,45 @@
 
 namespace App\Entity;
 
-use App\Repository\AdminRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
-#[ORM\Entity(repositoryClass: AdminRepository::class)]
-#[ORM\Table(name: '`admin`')]
-class Admin implements UserInterface, PasswordAuthenticatedUserInterface
+/**
+ * Admin
+ *
+ * @ORM\Table(name="admin", uniqueConstraints={@ORM\UniqueConstraint(name="UNIQ_880E0D76E7927C74", columns={"email"})})
+ * @ORM\Entity
+ */
+class Admin
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 180, unique: true)]
-    private ?string $email = null;
-
-    #[ORM\Column]
-    private array $roles = [];
-
     /**
-     * @var string The hashed password
-     */
-    #[ORM\Column]
-    private ?string $password = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * A visual identifier that represents this user.
+     * @var int
      *
-     * @see UserInterface
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
+    private $id;
 
     /**
-     * @see UserInterface
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=180, nullable=false)
      */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
+    private $email;
 
     /**
-     * @see PasswordAuthenticatedUserInterface
+     * @var array
+     *
+     * @ORM\Column(name="roles", type="json", nullable=false)
      */
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
+    private $roles;
 
     /**
-     * @see UserInterface
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
      */
-    public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
+    private $password;
+
+
 }
