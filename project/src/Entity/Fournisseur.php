@@ -1,82 +1,149 @@
 <?php
 
+// src/Entity/Fournisseur.php
+
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Fournisseur
- *
+ * @ORM\Entity(repositoryClass="App\Repository\FournisseurRepository")
  * @ORM\Table(name="fournisseur")
- * @ORM\Entity
  */
 class Fournisseur
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="fournisseur_id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Id()
+     * @ORM\GeneratedValue()
+     * @ORM\Column(type="integer")
      */
-    private $fournisseurId;
+    private $id;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="nom", type="string", length=45, nullable=true)
+     * @ORM\Column(type="string", length=45, nullable=true)
      */
     private $nom;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="prenom", type="string", length=45, nullable=true)
+     * @ORM\Column(type="string", length=45, nullable=true)
      */
     private $prenom;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="adresse", type="string", length=45, nullable=true)
+     * @ORM\Column(type="string", length=45, nullable=true)
      */
     private $adresse;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="siren", type="string", length=45, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $siren;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="nom_entreprise", type="string", length=45, nullable=true)
+     * @ORM\Column(type="string", length=45, nullable=true)
      */
     private $nomEntreprise;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Secteur", inversedBy="fournisseurFournisseur")
-     * @ORM\JoinTable(name="fournisseur_has_secteur",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="fournisseur_fournisseur_id", referencedColumnName="fournisseur_id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="secteur_secteur_id", referencedColumnName="secteur_id")
-     *   }
-     * )
+     * @ORM\ManyToMany(targetEntity="App\Entity\Secteur", inversedBy="fournisseurs")
      */
-    private $secteurSecteur = array();
+    private $secteurs;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->secteurSecteur = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->secteurs = new ArrayCollection();
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(?string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(?string $prenom): self
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?string $adresse): self
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getSiren(): ?string
+    {
+        return $this->siren;
+    }
+
+    public function setSiren(?string $siren): self
+    {
+        $this->siren = $siren;
+
+        return $this;
+    }
+
+    public function getNomEntreprise(): ?string
+    {
+        return $this->nomEntreprise;
+    }
+
+    public function setNomEntreprise(?string $nomEntreprise): self
+    {
+        $this->nomEntreprise = $nomEntreprise;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Secteur[]
+     */
+    public function getSecteurs(): Collection
+    {
+        return $this->secteurs;
+    }
+
+    public function addSecteur(Secteur $secteur): self
+    {
+        if (!$this->secteurs->contains($secteur)) {
+            $this->secteurs[] = $secteur;
+        }
+
+        return $this;
+    }
+
+    public function removeSecteur(Secteur $secteur): self
+    {
+        if ($this->secteurs->contains($secteur)) {
+            $this->secteurs->removeElement($secteur);
+        }
+
+        return $this;
+    }
 }

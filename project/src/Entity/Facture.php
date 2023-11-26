@@ -103,5 +103,19 @@ class Facture
      */
     private $fournisseurFournisseur;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="User", mappedBy="factureFature")
+     */
+    private $userUser = array();
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->userUser = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 }
