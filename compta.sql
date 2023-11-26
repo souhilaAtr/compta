@@ -50,7 +50,7 @@ ENGINE = InnoDB;
 -- Table `compta`.`facture`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compta`.`facture` (
-  `fature_id` INT NOT NULL AUTO_INCREMENT,
+  `facture_id` INT NOT NULL AUTO_INCREMENT,
   `date_facture` DATE NULL,
   `numero_facture` VARCHAR(45) NULL,
   `designation` VARCHAR(45) NULL,
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `compta`.`facture` (
   `TVA` VARCHAR(45) NULL,
   `montant TTC` VARCHAR(45) NULL,
   `fournisseur_fournisseur_id` INT NOT NULL,
-  PRIMARY KEY (`fature_id`, `fournisseur_fournisseur_id`),
+  PRIMARY KEY (`facture_id`, `fournisseur_fournisseur_id`),
   INDEX `fk_facture_fournisseur1_idx` (`fournisseur_fournisseur_id` ASC) VISIBLE,
   CONSTRAINT `fk_facture_fournisseur1`
     FOREIGN KEY (`fournisseur_fournisseur_id`)
@@ -77,9 +77,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `compta`.`user_has_facture` (
   `user_user_id` INT NOT NULL,
-  `facture_fature_id` INT NOT NULL,
-  PRIMARY KEY (`user_user_id`, `facture_fature_id`),
-  INDEX `fk_user_has_facture_facture1_idx` (`facture_fature_id` ASC) VISIBLE,
+  `facture_facture_id` INT NOT NULL,
+  PRIMARY KEY (`user_user_id`, `facture_facture_id`),
+  INDEX `fk_user_has_facture_facture1_idx` (`facture_facture_id` ASC) VISIBLE,
   INDEX `fk_user_has_facture_user_idx` (`user_user_id` ASC) VISIBLE,
   CONSTRAINT `fk_user_has_facture_user`
     FOREIGN KEY (`user_user_id`)
@@ -87,8 +87,8 @@ CREATE TABLE IF NOT EXISTS `compta`.`user_has_facture` (
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_user_has_facture_facture1`
-    FOREIGN KEY (`facture_fature_id`)
-    REFERENCES `compta`.`facture` (`fature_id`)
+    FOREIGN KEY (`facture_facture_id`)
+    REFERENCES `compta`.`facture` (`facture_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;

@@ -21,30 +21,41 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create();
 
-        // Peupler la table User
-        for ($i = 0; $i < 10; $i++) {
-            $user = new User();
-            $user->setNom($faker->lastName);
-            $user->setPrenom($faker->firstName);
-            $user->setPassword($faker->password);
-            $user->setEmail($faker->email);
-            $user->setAdresse($faker->address);
-            $user->setMobile($faker->phoneNumber);
-            $manager->persist($user);
-        }
-
-        // Peupler la table Fournisseur
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $fournisseur = new Fournisseur();
-            $fournisseur->setNom($faker->lastName);
-            $fournisseur->setPrenom($faker->firstName);
-            $fournisseur->setAdresse($faker->address);
-            $fournisseur->setSiren($faker->ean8);
-            $fournisseur->setNomEntreprise($faker->company);
+            // configurez les propriétés du fournisseur
             $manager->persist($fournisseur);
         }
+        $manager->flush(); // Assurez-vous de flush les fournisseurs pour les sauvegarder dans la base de données
 
-        // Ajoutez des sections, fournisseurs_has_secteur, stations_essence, et user_has_facture selon le même modèle
+        // Utilisez les fournisseurs existants pour créer les factures
+        for ($i = 0; $i < 5; $i++) {
+            $facture = new Facture();
+            // configurez les propriétés de la facture
+
+            // Récupérez un fournisseur existant depuis la base de données
+            $fournisseur = $manager->getRepository(Fournisseur::class)->findOneBy([]);
+
+            // Associez le fournisseur à la facture
+            $facture->setFournisseur($fournisseur);
+
+            $manager->persist($facture);
+        }
+
+        for ($i = 0; $i < 5; $i++) {
+            $facture = new Facture();
+            $facture->setDateFacture($faker->dateTimeBetween('-1 year', 'now'));
+            $facture->setNumeroFacture($faker->ean13);
+            $facture->setCodeProduit($faker->ean13);
+            $facture->setQuantite($faker->numberBetween(1, 10));
+            $facture->setPrixUnitaire($faker->randomFloat(2, 1, 100));
+            $facture->setMontantHT($faker->randomFloat(2, 1, 1000));
+            $facture->setRemise($faker->randomFloat(2, 0, 100));
+            $facture->setTVA($faker->randomFloat(2, 1, 20));
+            $facture->setMontantTTC($faker->randomFloat(2, 1, 1000));
+
+            
+        }
 
         $manager->flush();
     }

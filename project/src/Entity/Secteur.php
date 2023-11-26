@@ -1,53 +1,95 @@
 <?php
+// src/Entity/Secteur.php
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Secteur
- *
+ * @ORM\Entity(repositoryClass="App\Repository\SecteurRepository")
  * @ORM\Table(name="secteur")
- * @ORM\Entity
  */
 class Secteur
 {
     /**
-     * @var int
-     *
-     * @ORM\Column(name="secteur_id", type="integer", nullable=false)
-     * @ORM\Id
+     * @ORM\Id()
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\Column(name="id", type="integer", nullable=false)
      */
-    private $secteurId;
+    private $id;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="nom_secteur", type="string", length=45, nullable=true)
      */
     private $nomSecteur;
 
     /**
-     * @var string|null
-     *
      * @ORM\Column(name="code_secteur", type="string", length=45, nullable=true)
      */
     private $codeSecteur;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
      * @ORM\ManyToMany(targetEntity="Fournisseur", mappedBy="secteurSecteur")
      */
-    private $fournisseurFournisseur = array();
+    private $fournisseurFournisseur;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->fournisseurFournisseur = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fournisseurFournisseur = new ArrayCollection();
     }
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getNomSecteur(): ?string
+    {
+        return $this->nomSecteur;
+    }
+
+    public function setNomSecteur(?string $nomSecteur): self
+    {
+        $this->nomSecteur = $nomSecteur;
+
+        return $this;
+    }
+
+    public function getCodeSecteur(): ?string
+    {
+        return $this->codeSecteur;
+    }
+
+    public function setCodeSecteur(?string $codeSecteur): self
+    {
+        $this->codeSecteur = $codeSecteur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Fournisseur[]
+     */
+    public function getFournisseurFournisseur(): Collection
+    {
+        return $this->fournisseurFournisseur;
+    }
+
+    public function addFournisseurFournisseur(Fournisseur $fournisseurFournisseur): self
+    {
+        if (!$this->fournisseurFournisseur->contains($fournisseurFournisseur)) {
+            $this->fournisseurFournisseur[] = $fournisseurFournisseur;
+        }
+
+        return $this;
+    }
+
+    public function removeFournisseurFournisseur(Fournisseur $fournisseurFournisseur): self
+    {
+        $this->fournisseurFournisseur->removeElement($fournisseurFournisseur);
+
+        return $this;
+    }
 }

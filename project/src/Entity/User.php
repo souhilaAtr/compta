@@ -145,24 +145,4 @@ class User
     {
         return $this->factures;
     }
-
-    public function addFacture(Facture $facture): self
-    {
-        if (!$this->factures->contains($facture)) {
-            $this->factures[] = $facture;
-            $facture->addUserUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFacture(Facture $facture): self
-    {
-        if ($this->factures->contains($facture)) {
-            $this->factures->removeElement($facture);
-            $facture->removeUserUser($this);
-        }
-
-        return $this;
-    }
 }
