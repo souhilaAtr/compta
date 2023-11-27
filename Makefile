@@ -80,7 +80,7 @@ npm-watch: ## Update all npm dependencies
 ## —— 📊 Database ——
 database-init: ## Init database
 	$(MAKE) database-drop
-	$(MAKE)  
+	$(MAKE) database-create
 	$(MAKE) database-migrate
 	$(MAKE) database-fixtures-load
 

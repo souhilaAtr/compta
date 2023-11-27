@@ -12,12 +12,11 @@ RUN apt-get update && \
     && locale-gen
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
 
 # Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash \
     && apt-get install -y nodejs
-
 
 # Configure and install PHP extensions
 RUN docker-php-ext-configure intl \
@@ -25,10 +24,9 @@ RUN docker-php-ext-configure intl \
     && pecl install apcu \
     && docker-php-ext-enable apcu
 
-# Install Symfony CLI
-RUN curl -sS https://get.symfony.com/cli/installer | bash \
-    && mv /root/.symfony/* /usr/local/bin/
-
 # Set the working directory
 WORKDIR /var/www/
 
+# Clean up
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

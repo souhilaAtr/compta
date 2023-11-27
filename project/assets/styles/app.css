@@ -1,3 +1,11 @@
+/* assets/css/app.css */
+
+
+@import '~bootstrap/dist/css/bootstrap.css';
+
+/* Votre CSS personnalisé ici */
+
+
 body {
     background-color: lightgray;
     border: 2px solid purple;
