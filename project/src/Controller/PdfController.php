@@ -15,6 +15,17 @@ class PdfController extends AbstractController
     /**
      * @Route("/upload-pdf", name="upload_pdf")
      */
+    private function convertPdfToText(string $filePath): string
+    {
+        $parser = new Parser();
+        $pdf = $parser->parseFile($filePath);
+
+        return $pdf->getText();
+    }
+
+    /**
+     * @Route("/upload-pdf", name="upload_pdf")
+     */
     public function uploadPdf(Request $request): Response
     {
         // Récupération du fichier PDF soumis via le formulaire
@@ -37,31 +48,35 @@ class PdfController extends AbstractController
 
         // Conversion du PDF en texte brut
         $text = $this->convertPdfToText($filePath);
-               
-        // Rendu du texte brut en HTML
-        $html = nl2br($text);
-    //    if(preg_match('name',$html)){
-    //     $facturename = $html->name;
-    //    }
-        // Affichage de la page HTML résultante
+        
+        // Recherche du numéro de facture dans le texte
+        $factureNumber = $this->extractFactureNumber($text);
+
+        // Rendu du texte brut et du numéro de facture en HTML
         return $this->render('pdf/show.html.twig', [
-            'html' => $html,
-            "facturename"   => $facturename
+            'html' => nl2br($text),
+            'factureNumber' => $factureNumber,
         ]);
     }
 
     /**
-     * Convertir le PDF en texte brut.
+     * Extrait le numéro de facture à partir du texte brut.
      *
-     * @param string $filePath Chemin du fichier PDF
+     * @param string $text Texte brut extrait du PDF
      *
-     * @return string Texte brut extrait du PDF
+     * @return string|null Numéro de facture extrait ou null si non trouvé
      */
-    private function convertPdfToText(string $filePath): string
+    private function extractFactureNumber(string $text): ?string
     {
-        $parser = new Parser();
-        $pdf = $parser->parseFile($filePath);
+        // Utilisez une expression régulière pour rechercher le numéro de facture
+        // Remplacez le motif de l'expression régulière par celui correspondant à votre numéro de facture
+        $pattern = '/CENTRAL : (\d+)/i';
 
-        return $pdf->getText();
+        if (preg_match($pattern, $text, $matches)) {
+            // Retourne le premier groupe de capture correspondant (le numéro de facture)
+            return $matches[1];
+        }
+
+        return null;
     }
 }

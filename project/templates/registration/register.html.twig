@@ -15,7 +15,25 @@
 
         <h1 class="h3 mb-3 font-weight-normal">Veuillez vous enregistrer</h1>
 
-        {{ form_row(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form_row(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(registrationForm.mobile, {'attr': {'class': 'form-control', 'placeholder': 'Mobile'}}) }}
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                {{ form_row(registrationForm.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(registrationForm.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+            </div>
+        </div>
+
+        {{ form_row(registrationForm.adresse, {'attr': {'class': 'form-control', 'placeholder': 'Adresse'}}) }}
         {{ form_row(registrationForm.plainPassword, {
             'label': 'Mot de Passe',
             'attr': {'class': 'form-control', 'placeholder': 'Mot de Passe'}
@@ -26,4 +44,3 @@
         {{ form_end(registrationForm) }}
     </div>
 {% endblock %}
-
