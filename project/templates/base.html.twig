@@ -6,6 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
+    <head>
+</head>
     {% block stylesheets %}
     {{ encore_entry_link_tags('app') }}
     {% endblock %}
@@ -15,6 +17,7 @@
     {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
     {% endblock %}
+<link rel="stylesheet" href="https://bootswatch.com/5/sandstone/bootstrap.min.css">
 </head>
 
 <body>
