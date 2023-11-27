@@ -3,23 +3,59 @@
 
 @import '~bootstrap/dist/css/bootstrap.css';
 
-/* Votre CSS personnalisé ici */
 
 
 body {
-    background-color: lightgray;
+    background-color: rgb(116, 113, 113);
     border: 2px solid purple;
+    font-family: 'Helvetica', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
 }
 
-.home-background {
-    background-image: url('/assets/img/review.jpg');
-    background-size: cover;
-    background-position: center;
+.navbar {
+    background-color: #fff; /* Couleur de fond de la navbar */
+    border-bottom: 2px solid #ddd; /* Bordure inférieure */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Transition douce pour la couleur de fond et l'ombre */
+}
+
+.navbar-brand {
+    margin-left: 2vw;
+    font-size: 24px; /* Taille de la police pour le logo */
+    font-weight: bold;
+    color: #4285f4; /* Couleur du texte du logo */
+    transition: color 0.3s ease; /* Transition de couleur douce */
+}
+
+.navbar-brand:hover {
+    color: #345db5; /* Couleur du texte du logo au survol */
+}
+
+.navbar-toggler-icon {
+    background-color: #4285f4; /* Couleur de l'icône du bouton de bascule */
+}
+
+.navbar-nav .nav-item {
+    margin-right: 15px; /* Marge entre les éléments de la navbar */
+}
+
+.navbar-nav .nav-link {
+    color: #555; /* Couleur du texte des liens */
+    transition: color 0.3s ease; /* Transition de couleur douce */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #345db5; /* Couleur du texte des liens au survol */
+}
+
+.navbar-nav.ml-auto .nav-link {
+    font-weight: bold; /* Police plus grasse pour les liens à droite */
 }
 
 .sliderconteneur {
     max-width: 90%; 
-    margin: 0 auto; 
+    margin: 10vh; 
     display: flex;
     text-align: center;
     justify-content: center;
@@ -40,4 +76,53 @@ body {
     height: auto;
 }
 
+
+/* styles.css */
+
+
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #4285f4;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4285f4;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #345db5;
+}
 
