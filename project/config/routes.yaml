@@ -1,5 +1,48 @@
 # config/routes.yaml
 
+
+admin_register:
+    path: '/admin/register'
+    controller: 'App\Controller\AdminController::index'
+
+admin:
+    path: '/admin/'
+    controller: 'App\Controller\AdminController::index'
+    methods: ['GET']
+
+app_admin_new:
+    path: '/admin/new'
+    controller: 'App\Controller\AdminController::new'
+    methods: ['GET', 'POST']
+
+
+app_admin_index:
+    path: '/admin/'
+    controller: 'App\Controller\AdminController::index'
+    methods: ['GET']
+
+
+
+app_admin_show:
+    path: '/admin/{id}'
+    controller: 'App\Controller\AdminController::show'
+    methods: ['GET']
+    requirements:
+        id: '\d+'
+
+app_admin_edit:
+    path: '/admin/{id}/edit'
+    controller: 'App\Controller\AdminController::edit'
+    methods: ['GET', 'POST']
+    requirements:
+        id: '\d+'
+
+app_admin_delete:
+    path: '/admin/{id}'
+    controller: 'App\Controller\AdminController::delete'
+    methods: ['POST']
+
+        
 app_login:
     path: /login
     controller: App\Controller\SecurityController::login

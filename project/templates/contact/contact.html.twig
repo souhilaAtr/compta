@@ -5,10 +5,33 @@
 {% block title %}Contact{% endblock %}
 
 {% block body %}
-    <h1>Contactez-nous</h1>
+    <div class="container mt-5">
+        <h1>Contactez-nous</h1>
+        <div class="row">
+            <div class="col-md-6">
+                {% if app.flashes('success') %}
+                    {% for flashMessage in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ flashMessage }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button type="submit" class="btn btn-primary">Envoyer</button>
-    {{ form_end(form) }}
+                {{ form_start(form) }}
+                <div class="mb-3">
+                    {{ form_row(form.name, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.message, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
