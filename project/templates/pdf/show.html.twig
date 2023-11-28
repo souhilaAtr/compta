@@ -7,13 +7,15 @@
 {% block body %}
     <h1>Contenu PDF</h1>
 
-    <div>
-        {{ html|raw }}
-    </div>
+   
 
     {% if factureNumber is not null %}
+        <p>Résultat de la comparaison : {{ result|default('Numéro de facture non trouvé.') }}</p>
         <p>Numéro de facture : <span style="color: red;">{{ factureNumber }}</span></p>
     {% else %}
         <p>Aucun numéro de facture trouvé.</p>
     {% endif %}
+     <div>
+      {{ html|raw }}
+    </div>
 {% endblock %}
