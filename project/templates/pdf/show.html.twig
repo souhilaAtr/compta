@@ -9,12 +9,10 @@
 
    
 
-    {% if factureNumber is not null %}
-        <p>Résultat de la comparaison : {{ result|default('Numéro de facture non trouvé.') }}</p>
-        <p>Numéro de facture : <span style="color: red;">{{ factureNumber }}</span></p>
-    {% else %}
-        <p>Aucun numéro de facture trouvé.</p>
-    {% endif %}
+    {% for result in results %}
+        <p>Résultat de la comparaison : {{ result['result'] }}</p>
+       
+    {% endfor %}
      <div>
       {{ html|raw }}
     </div>
