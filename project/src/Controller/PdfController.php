@@ -46,7 +46,7 @@ class PdfController extends AbstractController
         $text = $this->convertPdfToText($filePath);
 
         // Utilisation de la classe FactureExtractor pour extraire le numéro de facture
-    $results = $this->factureExtractor->extractFactureNumber($text);
+    $results = $this->factureExtractor->extractInformation($text);
 
 
        // Rendu du texte brut et des résultats de la comparaison en HTML

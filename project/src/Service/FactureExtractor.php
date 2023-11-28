@@ -6,26 +6,29 @@ namespace App\Service;
 class FactureExtractor
 {
     /**
-     * Extrait le numéro de facture à partir du texte brut en utilisant différents motifs.
+     * Extrait diverses informations à partir du texte brut en utilisant différents motifs.
      *
      * @param string $text Texte brut extrait du PDF
      *
-     * @return array Résultat de la comparaison et tableau de numéros de facture extraits
+     * @return array Résultats de l'extraction
      */
-    public function extractFactureNumber(string $text): array
+    public function extractInformation(string $text): array
     {
         // Liste des motifs de recherche avec les messages correspondants
         $patterns = [
-            'pao' => '/pao : (\w+)/i',
-            'tcn' => '/tcn : (\w+)/i',
-            'ref' => '/ref : (\w+)/i',
-            'distance' => '/distance : (\w+)/i',
-            'de' => '/de : (\w+)/i',
-            'voiture' => '/voiture (\w+)/i',
-            'train' => '/train (\w+)/i',
+            'NUMERO' => '/N°(.+)/i',
+            'FACTURE_DATE' => '/DU (\d{2}\/\d{2}\/\d{2})/i',
+            'REFERENCE_CLIENT' => '/Référence client : (\d{3} \d{3} \d{3})/i',
+            'NUMERO_CONTRAT' => '/CONTRAT(.+)/i',
+            'LIEU_CONSOMMATION' => '/Lieu de consommation :\s*([\s\S]+?)\s*(?=\w)/i',
+            'NOM_CLIENT' => '/MR ([A-Z\s]+)\s*(?=\d)/i',
+            'FACTURE_DETAILS' => '/FACTURE(.+)/i', 
 
-
-
+            'CONTRAT' => '/CONTRAT(.+)/i', 
+            'CLIENT' => '/CLIENT(.+)/i', 
+            'TTC' => '/TTC(.+)/i', 
+            'TVA' => '/TVA(.+)/i', 
+            'PRIX' => '/PRIX(.+)/i',
 
             // Ajoutez d'autres motifs au besoin
         ];
@@ -47,10 +50,10 @@ class FactureExtractor
             }
         }
 
-        // Si aucun numéro de facture n'est trouvé, ajouter le résultat par défaut au tableau des résultats
+        // Si aucun résultat n'est trouvé, ajouter un résultat par défaut au tableau des résultats
         if (empty($results)) {
             $results[] = [
-                'result' => 'Numéro de facture non trouvé.',
+                'result' => 'Aucune information trouvée.',
                 'factureNumber' => null,
             ];
         }
