@@ -16,9 +16,12 @@ class FactureExtractor
     {
         // Liste des motifs de recherche avec les messages correspondants
         $patterns = [
+            'FACTURE_NUMERO' => '/N°\s*(\d{1,3}\s*\d{1,3}\s*\d{1,3}\s*\d{1,3})/i',
+
+
             'NUMERO' => '/N°(.+)/i',
-            'FACTURE_DATE' => '/DU (\d{2}\/\d{2}\/\d{2})/i',
-            'REFERENCE_CLIENT' => '/Référence client : (\d{3} \d{3} \d{3})/i',
+            'FACTURE_DATE' => '/DU\s*(\d{2}\/\d{2}\/\d{2})/i',
+            
             'NUMERO_CONTRAT' => '/CONTRAT(.+)/i',
             'LIEU_CONSOMMATION' => '/Lieu de consommation :\s*([\s\S]+?)\s*(?=\w)/i',
             'NOM_CLIENT' => '/MR ([A-Z\s]+)\s*(?=\d)/i',
@@ -27,6 +30,7 @@ class FactureExtractor
             'CONTRAT' => '/CONTRAT(.+)/i', 
             'CLIENT' => '/CLIENT(.+)/i', 
             'TTC' => '/TTC(.+)/i', 
+           
             'TVA' => '/TVA(.+)/i', 
             'PRIX' => '/PRIX(.+)/i',
 
@@ -40,12 +44,12 @@ class FactureExtractor
         foreach ($patterns as $key => $pattern) {
             if (preg_match($pattern, $text, $matches)) {
                 // Si un motif correspond, extraire les informations et ajouter au tableau des résultats
-                $factureNumber = $matches[1];
-                $result = "Les données après $key sont : $factureNumber";
+                $TableauResultats = $matches[1];
+                $result = "Les données après $key sont : $TableauResultats";
 
                 $results[] = [
                     'result' => $result,
-                    'factureNumber' => $factureNumber,
+                    'TableauResultats' => $TableauResultats,
                 ];
             }
         }
@@ -54,7 +58,7 @@ class FactureExtractor
         if (empty($results)) {
             $results[] = [
                 'result' => 'Aucune information trouvée.',
-                'factureNumber' => null,
+                'TableauResultats' => null,
             ];
         }
 

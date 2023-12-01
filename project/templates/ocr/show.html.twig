@@ -1,0 +1,14 @@
+{# templates/ocr/show.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats OCR{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Résultats OCR</h1>
+
+        <h2>Texte extrait :</h2>
+        <pre>{{ ocrText }}</pre>
+    </div>
+{% endblock %}
