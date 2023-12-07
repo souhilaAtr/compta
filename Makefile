@@ -14,14 +14,14 @@ RED = /bin/echo -e "\x1b[31m\#\# $1\x1b[0m"
 
 ## —— 🔥 App ——
 init: ## Init the project
-	$(MAKE) start
+	$(MAKE) docker-build
+	$(MAKE) docker-start
 	$(MAKE) composer-install
 	$(MAKE) npm-install
 	$(MAKE) virtualenv-install
 	$(MAKE) spacy-install-fr
 	$(MAKE) install-dependencies
-
-	@$(call GREEN,"Tadaa The application is available at: http:/localhost:8000/.")
+	@$(call GREEN,"Tadaa! The application is available at: http:/localhost:8000/.")
 
 cache-clear: ## Clear cache
 	$(SYMFONY_CONSOLE) cache:clear
@@ -54,20 +54,25 @@ e2e-test: ## Run E2E tests
 	$(PHP) bin/phpunit --testdox tests/E2E/
 
 ## —— 🐳 Docker ——
+docker-build: ## Build Docker image
+	$(DOCKER_COMPOSE) build
+
 start: ## Start app
 	$(MAKE) docker-start 
+ 
 docker-start: 
 	$(DOCKER_COMPOSE) up -d
 
 stop: ## Stop app
 	$(MAKE) docker-stop
+
 docker-stop: 
 	$(DOCKER_COMPOSE) stop
 	@$(call RED,"The containers are now stopped.")
 
 virtualenv-install: ## Install virtual environment
 	$(EXEC) apt-get update
-	$(EXEC) apt-get install -y --no-install-recommends     python3.11-venv python3-pip
+	$(EXEC) apt-get install -y --no-install-recommends python3.11-venv python3-pip
 	$(EXEC) python3 -m venv /venv
 	$(EXEC) /venv/bin/pip install --upgrade pip
 	$(EXEC) /venv/bin/pip install pipx
@@ -75,17 +80,15 @@ virtualenv-install: ## Install virtual environment
 	$(EXEC) /venv/bin/pipx install spacy
 
 spacy-install-fr: ## Install spaCy French model
-	$(EXEC) sh -c "venv/bin/python -m spacy download fr_core_news_sm"
+	$(EXEC) sh -c "/venv/bin/python -m spacy download fr_core_news_sm"
 
 install-dependencies: ## Install dependencies including Ghostscript and Tesseract
 	$(EXEC) apt-get update 
-
-	$(EXEC)	apt-get install -y --no-install-recommends \
+	$(EXEC) apt-get install -y --no-install-recommends \
 		ghostscript \
 		tesseract-ocr 
-		
 	$(EXEC) apt-get clean 
-	$(EXEC)	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+	$(EXEC) rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 		
 ## —— 🎻 Composer ——
 composer-install: ## Install dependencies
@@ -138,6 +141,6 @@ database-fixtures-load: ## Load fixtures
 fixtures: ## Alias : database-fixtures-load
 	$(MAKE) database-fixtures-load
 
-## —— 🛠️  Others ——
+## —— 🛠️ Others ——
 help: ## List of commands
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'

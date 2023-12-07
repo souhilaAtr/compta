@@ -7,26 +7,30 @@
 {% block body %}
     <h1>Processed Data</h1>
 
-
     {% if processed_data %}
-     
-
-        {% if processed_data.rouen_info is defined %}
-            <p><strong>Info Rouen:</strong> {{ processed_data.rouen_info }}</p>
+        {% if processed_data.nom is defined %}
+            <p><strong>Nom:</strong> {{ processed_data.nom }}</p>
         {% endif %}
 
-        {% if processed_data.ter_info is defined %}
-            <p><strong>Info TER:</strong> {{ processed_data.ter_info }}</p>
+        {% if processed_data.prenom is defined %}
+            <p><strong>Prénom:</strong> {{ processed_data.prenom }}</p>
         {% endif %}
 
-        {% if processed_data.tcn_info is defined %}
-            <p><strong>Info TCN:</strong> {{ processed_data.tcn_info }}</p>
+        {% if processed_data.contrat is defined %}
+            <p><strong>Contrat:</strong> {{ processed_data.contrat }}</p>
         {% endif %}
 
-        {% if processed_data.pao_info is defined %}
-            <p><strong>Info PAO:</strong> {{ processed_data.pao_info }}</p>
+        {% if processed_data.consommation is defined %}
+            <p><strong>Consommation:</strong> {{ processed_data.consommation }}</p>
         {% endif %}
-        
+
+        {% if processed_data.facture is defined %}
+            <p><strong>Facture:</strong> {{ processed_data.facture }}</p>
+        {% endif %}
+
+        {% if processed_data.client is defined %}
+            <p><strong>Client:</strong> {{ processed_data.client }}</p>
+        {% endif %}
     {% else %}
         <p>No processed data available.</p>
     {% endif %}

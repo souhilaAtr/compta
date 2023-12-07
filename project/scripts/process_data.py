@@ -5,55 +5,66 @@ import sys
 
 logging.basicConfig(level=logging.DEBUG)
 
+# Fonction pour traiter les données de Tesseract
 def process_tesseract_data(tesseract_output):
     # Utilise spaCy pour traiter les données Tesseract
     nlp = spacy.load("fr_core_news_sm")
     doc = nlp(tesseract_output)
 
     # Initialise les variables pour stocker les données
-    ter_found = False
-    rouen_found = False
-    tcn_found = False
-    pao_found = False
+    facture_found = False
+    nom_found = False
+    prenom_found = False
+    contrat_found = False
+    consommation_found = False
+    client_found = False
     processed_data = {
-        "ter_info": None,
-        "rouen_info": None,
-        "tcn_info": None,
-        "pao_info": None
+        "facture": None,
+        "nom": None,
+        "prenom": None,
+        "contrat": None,
+        "consommation": None,
+        "client": None
     }
 
     # Parcourt les phrases du texte
     for sentence in doc.sents:
         logging.debug(f"Analyzing sentence: {sentence.text}")
 
-     
-        # Vérifie si "ROUEN" est dans la phrase et récupère les mots suivants
-        if "ROUEN" in sentence.text.upper():
-            rouen_found = True
-            processed_data["rouen_info"] = " ".join([str(token) for token in sentence if token.is_alpha])
+        # Vérifie la présence des mots spécifiés dans la phrase
+        if "facture" in sentence.text.lower():
+            facture_found = True
+            processed_data["facture"] = sentence.text
 
-        # Vérifie si "TER" est dans la phrase et récupère les mots suivants
-        if "TER" in sentence.text.upper():
-            ter_found = True
-            processed_data["ter_info"] = " ".join([str(token) for token in sentence if token.is_alpha])
+        # Utilise spaCy pour extraire le nom et le prénom
+        for ent in sentence.ents:
+            if ent.label_ == "PER" and not nom_found:
+                nom_found = True
+                processed_data["nom"] = ent.text
+            elif ent.label_ == "PER" and not prenom_found:
+                prenom_found = True
+                processed_data["prenom"] = ent.text
 
-        # Vérifie si "TCN :" est dans la phrase et récupère les mots suivants
-        if "TCN :" in sentence.text:
-            tcn_found = True
-            tcn_index = sentence.text.find("TCN :")
-            tcn_info = sentence.text[tcn_index + 5:].strip()
-            processed_data["tcn_info"] = tcn_info
+        if "contrat" in sentence.text.lower():
+            contrat_found = True
+            processed_data["contrat"] = extract_contract_number(sentence)
 
-        # Vérifie si "PAO :" est dans la phrase et récupère les mots suivants
-        if "PAO " in sentence.text:
-            pao_found = True
-            pao_index = sentence.text.find("PAO ")
-            pao_info = sentence.text[pao_index + 5:].strip()
-            processed_data["pao_info"] = pao_info
+        if "consommation" in sentence.text.lower():
+            consommation_found = True
+            processed_data["consommation"] = sentence.text
 
-      
+        if "client" in sentence.text.lower():
+            client_found = True
+            processed_data["client"] = sentence.text
 
     return processed_data
+
+def extract_contract_number(sentence):
+    # Utilise les dépendances pour extraire le numéro de contrat
+    for token in sentence:
+        if token.text.isdigit() and "contrat" in [ancestor.text.lower() for ancestor in token.ancestors]:
+            return token.text
+    return None
 
 if __name__ == "__main__":
     # Récupère les données Tesseract à partir des arguments de la ligne de commande

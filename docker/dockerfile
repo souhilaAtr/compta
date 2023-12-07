@@ -26,9 +26,9 @@ RUN docker-php-ext-configure intl \
     && docker-php-ext-enable apcu
 
 # Install Python and pip for spaCy
-RUN apt-get update 
-RUN apt-get install -y --no-install-recommends \
-    python3.11-venv python3-pip
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        python3.11-venv python3-pip
 
 # Set up a virtual environment
 RUN python3 -m venv /venv
@@ -36,20 +36,17 @@ RUN python3 -m venv /venv
 # Activate the virtual environment
 ENV PATH="/venv/bin:$PATH"
 
-# Install spaCy
-RUN pip install spacy
-
-# Install spaCy French model
-RUN python -m spacy download fr_core_news_sm
+# Install spaCy and spaCy French model
+RUN pip install spacy && \
+    python -m spacy download fr_core_news_sm
 
 # Install Ghostscript and Tesseract
-RUN apt-get update 
-RUN apt-get install -y --no-install-recommends \
-    ghostscript \
-    tesseract-ocr 
-RUN apt-get clean 
-
-RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ghostscript \
+        tesseract-ocr \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set the working directory
 WORKDIR /var/www/
