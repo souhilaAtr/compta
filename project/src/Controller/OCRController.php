@@ -1,18 +1,24 @@
 <?php
 
-// src/Controller/OCRController.php
-
 namespace App\Controller;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
-use thiagoalessio\TesseractOCR\TesseractOCR;
 
 class OCRController extends AbstractController
 {
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * @Route("/ocr/upload", name="ocr_upload")
      */
@@ -26,59 +32,74 @@ class OCRController extends AbstractController
      */
     public function processFile(Request $request)
     {
-        if ($request->files->get('file')) {
-            $uploadedFile = $request->files->get('file');
-            $text = $this->uploadFile($uploadedFile);
+        $uploadedFile = $request->files->get('file');
 
-            return $this->render('ocr/show.html.twig', [
-                'ocrText' => $text,
-            ]);
+        if (!$uploadedFile) {
+            return $this->redirectToRoute('ocr_upload');
         }
 
-        // Gérer le cas où aucun fichier n'a été téléchargé
-        // Peut-être rediriger vers le formulaire d'importation avec un message d'erreur
+        $processedData = $this->processUploadedFile($uploadedFile);
+
+        return $this->render('ocr/show.html.twig', [
+            'processed_data' => $processedData,
+        ]);
     }
 
-    private function uploadFile(UploadedFile $file)
+    private function processUploadedFile(UploadedFile $file): array
     {
-        // Obtient le chemin du fichier PDF uploadé
         $pdfFilePath = $file->getPathname();
-
-        // Obtient le chemin du fichier TIFF de sortie
         $tiffFilePath = $this->convertPdfToTiff($pdfFilePath);
-
-        // Utilise Tesseract OCR pour extraire le texte du fichier TIFF
         $text = $this->runTesseract($tiffFilePath);
-
-        // Supprime le fichier TIFF après utilisation
         unlink($tiffFilePath);
 
-        return $text;
+        return $this->runPythonScript($text);
     }
 
-    private function convertPdfToTiff($pdfFilePath)
+    private function convertPdfToTiff(string $pdfFilePath): string
     {
-        // Obtient le chemin du répertoire temporaire
         $tempDir = sys_get_temp_dir();
-
-        // Obtient le chemin du fichier TIFF de sortie
         $tiffFilePath = $tempDir . '/' . uniqid('converted_', true) . '.tiff';
 
-        // Utilise Ghostscript pour convertir le PDF en TIFF
         $process = new Process(['gs', '-sDEVICE=tiff24nc', '-r300', '-o', $tiffFilePath, $pdfFilePath]);
         $process->mustRun();
 
         return $tiffFilePath;
     }
 
-    private function runTesseract($imageFilePath)
+    private function runTesseract(string $imageFilePath): string
     {
-        // Utilise Tesseract OCR pour extraire le texte du fichier TIFF
-        $tesseract = new TesseractOCR($imageFilePath);
-        $text = $tesseract->run();
+        $process = new Process(['tesseract', $imageFilePath, '-']);
+        $process->setTimeout(120); // Définir un délai plus long, par exemple 120 secondes
 
-        return $text;
+        $process->mustRun();
+
+        return $process->getOutput();
+    }
+
+    private function runPythonScript(string $tesseractOutput): array
+    {
+        $scriptPath = $this->getParameter('kernel.project_dir') . '/scripts/process_data.py';
+        $pythonExecutable = $this->getParameter('kernel.project_dir') . '/venv/bin/python';
+
+        $command = [$pythonExecutable, $scriptPath, $tesseractOutput];
+        $process = new Process($command);
+
+        // Ajoutez un var_dump pour voir la commande exacte
+        var_dump($command);
+
+        try {
+            // Ajoutez un var_dump pour voir la sortie brute
+            var_dump($process->mustRun()->getOutput());
+
+            $decodedOutput = json_decode($process->getOutput(), true);
+
+            // Ajoutez un var_dump pour voir la sortie JSON décodée
+            var_dump($decodedOutput);
+
+            return $decodedOutput;
+        } catch (ProcessFailedException $exception) {
+         
+            throw new \RuntimeException("Erreur lors de l'exécution du script Python. " . $exception->getMessage());
+        }
     }
 }
-
-

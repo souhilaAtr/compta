@@ -1,14 +1,33 @@
-{# templates/ocr/show.html.twig #}
+{# ocr/show.html.twig #}
 
 {% extends 'base.html.twig' %}
 
-{% block title %}Résultats OCR{% endblock %}
+{% block title %}Processed Data{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1>Résultats OCR</h1>
+    <h1>Processed Data</h1>
 
-        <h2>Texte extrait :</h2>
-        <pre>{{ ocrText }}</pre>
-    </div>
+
+    {% if processed_data %}
+     
+
+        {% if processed_data.rouen_info is defined %}
+            <p><strong>Info Rouen:</strong> {{ processed_data.rouen_info }}</p>
+        {% endif %}
+
+        {% if processed_data.ter_info is defined %}
+            <p><strong>Info TER:</strong> {{ processed_data.ter_info }}</p>
+        {% endif %}
+
+        {% if processed_data.tcn_info is defined %}
+            <p><strong>Info TCN:</strong> {{ processed_data.tcn_info }}</p>
+        {% endif %}
+
+        {% if processed_data.pao_info is defined %}
+            <p><strong>Info PAO:</strong> {{ processed_data.pao_info }}</p>
+        {% endif %}
+        
+    {% else %}
+        <p>No processed data available.</p>
+    {% endif %}
 {% endblock %}

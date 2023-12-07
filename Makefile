@@ -6,6 +6,7 @@ PHP = $(EXEC) php
 COMPOSER = $(EXEC) composer
 NPM = $(EXEC) npm
 SYMFONY_CONSOLE = $(PHP) bin/console
+PYTHON = $(EXEC) python3
 
 # Colors
 GREEN = /bin/echo -e "\x1b[32m\#\# $1\x1b[0m"
@@ -16,7 +17,11 @@ init: ## Init the project
 	$(MAKE) start
 	$(MAKE) composer-install
 	$(MAKE) npm-install
-	@$(call GREEN,"Tadaa The application is available at: http://127.0.0.1:8000/.")
+	$(MAKE) virtualenv-install
+	$(MAKE) spacy-install-fr
+	$(MAKE) install-dependencies
+
+	@$(call GREEN,"Tadaa The application is available at: http:/localhost:8000/.")
 
 cache-clear: ## Clear cache
 	$(SYMFONY_CONSOLE) cache:clear
@@ -60,6 +65,28 @@ docker-stop:
 	$(DOCKER_COMPOSE) stop
 	@$(call RED,"The containers are now stopped.")
 
+virtualenv-install: ## Install virtual environment
+	$(EXEC) apt-get update
+	$(EXEC) apt-get install -y --no-install-recommends     python3.11-venv python3-pip
+	$(EXEC) python3 -m venv /venv
+	$(EXEC) /venv/bin/pip install --upgrade pip
+	$(EXEC) /venv/bin/pip install pipx
+	$(EXEC) /venv/bin/pipx install --system-site-packages pipenv
+	$(EXEC) /venv/bin/pipx install spacy
+
+spacy-install-fr: ## Install spaCy French model
+	$(EXEC) sh -c "venv/bin/python -m spacy download fr_core_news_sm"
+
+install-dependencies: ## Install dependencies including Ghostscript and Tesseract
+	$(EXEC) apt-get update 
+
+	$(EXEC)	apt-get install -y --no-install-recommends \
+		ghostscript \
+		tesseract-ocr 
+		
+	$(EXEC) apt-get clean 
+	$(EXEC)	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+		
 ## —— 🎻 Composer ——
 composer-install: ## Install dependencies
 	$(COMPOSER) install
@@ -114,5 +141,3 @@ fixtures: ## Alias : database-fixtures-load
 ## —— 🛠️  Others ——
 help: ## List of commands
 	@grep -E '(^[a-zA-Z0-9_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
-
-

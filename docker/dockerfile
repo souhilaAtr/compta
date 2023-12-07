@@ -1,9 +1,10 @@
+# Use a base image with PHP and Apache
 FROM php:8.2-apache
 
 # Set ServerName in Apache configuration
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Install required dependencies
+# Install required dependencies for PHP
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip \
@@ -23,6 +24,32 @@ RUN docker-php-ext-configure intl \
     && docker-php-ext-install pdo pdo_mysql opcache intl zip calendar dom mbstring gd xsl \
     && pecl install apcu \
     && docker-php-ext-enable apcu
+
+# Install Python and pip for spaCy
+RUN apt-get update 
+RUN apt-get install -y --no-install-recommends \
+    python3.11-venv python3-pip
+
+# Set up a virtual environment
+RUN python3 -m venv /venv
+
+# Activate the virtual environment
+ENV PATH="/venv/bin:$PATH"
+
+# Install spaCy
+RUN pip install spacy
+
+# Install spaCy French model
+RUN python -m spacy download fr_core_news_sm
+
+# Install Ghostscript and Tesseract
+RUN apt-get update 
+RUN apt-get install -y --no-install-recommends \
+    ghostscript \
+    tesseract-ocr 
+RUN apt-get clean 
+
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set the working directory
 WORKDIR /var/www/
