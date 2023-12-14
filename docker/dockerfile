@@ -1,5 +1,5 @@
 # Use a base image with PHP and Apache
-FROM php:8.2-apache
+FROM php:8.2-apache-buster
 
 # Set ServerName in Apache configuration
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
